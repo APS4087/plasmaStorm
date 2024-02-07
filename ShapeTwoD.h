@@ -9,7 +9,6 @@ class ShapeTwoD
 protected:
     std::string name;
     bool containsWarpSpace;
-    std::string warpSpace;
     double area;
 
 public:

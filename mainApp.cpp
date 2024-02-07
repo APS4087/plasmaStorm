@@ -1,9 +1,11 @@
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <sstream>
 #include <cstdlib>
 #include <algorithm>
 #include <list>
-
+#include <random>
 #include "Cross.h"
 #include "Rectangle.h"
 #include "Square.h"
@@ -458,6 +460,42 @@ void userSortShapeData(std::list<ShapeTwoD *> &shapes)
     sortShapeData(shapes, option);
 }
 
+//---------------ADDTIONAL FEATURES -------------------------------
+
+// Function to search for shapes by name (case-insensitive)
+void searchByName(const std::list<ShapeTwoD *> &shapes, std::string name)
+{
+    bool found = false;
+    // Convert the user input name to lowercase
+    toLower(name);
+    for (const auto &shape : shapes)
+    {
+        std::string shapeName = shape->getName();
+        // Convert the shape name to lowercase for comparison
+        toLower(shapeName);
+        if (shapeName == name)
+        {
+            // Print information about the found shape
+            std::cout << std::endl;
+            std::cout << "Shape found:" << std::endl;
+            std::cout << "Name: " << shape->getName() << std::endl;
+            std::string specialTypeString = (shape->getContainsWarpSpace()) ? "WS" : "NS";
+            std::cout << "Special Type: " << specialTypeString << std::endl;
+            std::cout << "Area: " << shape->getArea() << " units square" << std::endl;
+            printVertices(*shape);
+            printPerimeterPoints(shape);
+            std::cout << "---------------------------------" << std::endl;
+            found = true;
+            // If you want to stop searching after finding the first match, you can break out of the loop here
+            // break;
+        }
+    }
+    if (!found)
+    {
+        std::cout << "No shape found with the specified name." << std::endl;
+    }
+}
+
 void showMenu()
 {
     std::cout << std::endl;
@@ -471,6 +509,7 @@ void showMenu()
     std::cout << "2) Compute area (for all records)" << std::endl;
     std::cout << "3) Print shapes report" << std::endl;
     std::cout << "4) Sort shape data" << std::endl;
+    std::cout << "5) Search by shape name" << std::endl;
     std::cout << "0) Exit " << std::endl;
 }
 
@@ -486,7 +525,7 @@ int main()
 {
     int choice;
     std::list<ShapeTwoD *> shapes;
-
+    std::string searchName;
     do
     {
         showMenu();
@@ -514,6 +553,14 @@ int main()
             std::cout << "You chose option 4: Sort shape data" << std::endl;
             userSortShapeData(shapes);
             break;
+        case 5:
+            // Code for searching shapes by name
+            std::cout << "You chose option 5: Search shapes by name" << std::endl;
+            std::cout << "Enter the name of the shape you want to search for: ";
+            std::cin >> searchName;
+            searchByName(shapes, searchName);
+            break;
+
         case 0:
             // Code for sorting shape data
             std::cout << "Thanks for using the program !! " << std::endl;
